@@ -7,19 +7,22 @@ RSpec.describe ConnectionHandler do
   subject(:handler) { ConnectionHandler.new(messages: messages) }
 
   context 'upon connection' do
+    let(:other_conn) { double }
     let(:message1) { double(contents: 'message 1') }
     let(:message2) { double(contents: 'message 2') }
 
     def perform!
       subject.connected(conn)
+      subject.connected(other_conn)
     end
 
     before do
       allow(messages).to receive(:all)
         .and_return([message1, message2])
+      allow(other_conn).to receive(:send)
     end
 
-    it 'sends all past messages to the new connection' do
+    it 'sends all past messages to the new connection once' do
       expect(conn).to receive(:send)
         .with('message 1')
       expect(conn).to receive(:send)
