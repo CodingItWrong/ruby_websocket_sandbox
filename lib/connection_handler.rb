@@ -3,21 +3,22 @@
 require_relative 'message'
 
 class ConnectionHandler
-  def initialize
+  def initialize(messages: Message)
     @connections = Set.new
+    @messages = messages
   end
 
   def connected(connection)
     connections << connection
 
-    Message.all.each do |message|
+    messages.all.each do |message|
       connection.send(message.contents)
     end
   end
 
   def received(_connection, data)
     puts "Faye received: #{data}"
-    Message.create!(contents: data)
+    messages.create!(contents: data)
     send_all(data)
   end
 
@@ -27,7 +28,7 @@ class ConnectionHandler
 
   private
 
-  attr_reader :connections
+  attr_reader :connections, :messages
 
   def send_all(data)
     connections.each do |connection|
