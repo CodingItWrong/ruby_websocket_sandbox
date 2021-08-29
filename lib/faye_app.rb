@@ -7,7 +7,7 @@ require_relative 'connection_handler'
 
 Handler = ConnectionHandler.new
 
-App = lambda do |env|
+FayeApp = lambda do |env|
   if Faye::WebSocket.websocket?(env)
     ws = Faye::WebSocket.new(env)
     ws.send('Connected to Faye')
