@@ -1,7 +1,5 @@
 require 'async/websocket/adapters/rack'
 require 'pry'
-require_relative 'connection_handler'
-require_relative 'async_connection_adapter'
 
 Handler = ConnectionHandler.new
 

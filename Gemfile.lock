@@ -122,6 +122,7 @@ DEPENDENCIES
   pry
   puma
   rspec
+  zeitwerk
 
 RUBY VERSION
    ruby 3.0.2p107
