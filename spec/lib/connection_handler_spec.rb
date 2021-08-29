@@ -1,5 +1,3 @@
-require_relative '../../lib/connection_handler'
-
 RSpec.describe ConnectionHandler do
   let(:messages) { class_double(Message) }
   let(:conn) { double }
