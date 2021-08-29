@@ -11,6 +11,9 @@ FayeApp = lambda do |env|
   if Faye::WebSocket.websocket?(env)
     ws = Faye::WebSocket.new(env)
     ws.send('Connected to Faye')
+
+    # note that Faye::WebSocket already matches the contract of a connection,
+    # so it doesn't need to be adapted.
     Handler.connected(ws)
 
     ws.on :message do |event|
