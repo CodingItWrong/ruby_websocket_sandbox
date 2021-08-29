@@ -3,13 +3,14 @@
 require 'faye/websocket'
 require 'pry'
 require_relative 'db'
-require_relative 'web_socket_handler'
+require_relative 'connection_handler'
 
-Handler = WebSocketHandler.new
+Handler = ConnectionHandler.new
 
 App = lambda do |env|
   if Faye::WebSocket.websocket?(env)
     ws = Faye::WebSocket.new(env)
+    ws.send('Connected to Faye')
     Handler.connected(ws)
 
     # Return async Rack response

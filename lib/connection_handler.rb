@@ -2,27 +2,25 @@
 
 require_relative 'message'
 
-class WebSocketHandler
+class ConnectionHandler
   def initialize
     @connections = Set.new
   end
 
-  def connected(ws)
-    connections << ws
-
-    ws.send('Connected to Faye')
+  def connected(connection)
+    connections << connection
 
     Message.all.each do |message|
-      ws.send(message.contents)
+      connection.send(message.contents)
     end
 
-    ws.on :message do |event|
+    connection.on :message do |event|
       received(event.data)
     end
 
-    ws.on :close do |event|
+    connection.on :close do |event|
       p [:close, event.code, event.reason]
-      connections.delete(ws)
+      connections.delete(connection)
     end
   end
 
