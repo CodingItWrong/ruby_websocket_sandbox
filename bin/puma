@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+puma config_puma.ru -p 3000
