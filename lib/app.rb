@@ -1,6 +1,7 @@
 require 'faye/websocket'
 require_relative 'db'
 require_relative 'message'
+require 'pry'
 
 App = lambda do |env|
   if Faye::WebSocket.websocket?(env)

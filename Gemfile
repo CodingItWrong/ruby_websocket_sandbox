@@ -9,3 +9,7 @@ ruby '3.0.2'
 gem 'faye-websocket'
 gem 'puma'
 gem 'activerecord'
+
+group :development, :test do
+  gem 'pry'
+end
