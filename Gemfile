@@ -9,6 +9,7 @@ ruby '3.0.2'
 gem 'zeitwerk'
 gem 'activerecord'
 gem 'pg'
+gem 'rake'
 
 # faye layer
 gem 'faye-websocket'
