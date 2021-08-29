@@ -16,9 +16,11 @@ class ConnectionHandler
     end
   end
 
-  def received(_connection, data)
-    messages.create!(contents: data)
+  def received(connection, data)
+    message = messages.create!(contents: data)
     send_all(data)
+  rescue => e
+    connection.send(e.message)
   end
 
   def disconnected(connection)

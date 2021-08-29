@@ -61,6 +61,31 @@ RSpec.describe ConnectionHandler do
     end
   end
 
+  context 'when receiving an empty message' do
+    let(:other_conn) { double }
+
+    def perform!
+      subject.connected(conn)
+      subject.connected(other_conn)
+      subject.received(conn, '')
+    end
+
+    before do
+      allow(messages).to receive(:all)
+        .and_return([])
+      allow(messages).to receive(:create!)
+        .and_raise(RuntimeError.new('foof'))
+      allow(conn).to receive(:send)
+    end
+
+    it 'sends the error message to the sender only' do
+      message = "foof"
+      expect(conn).to receive(:send).with(message)
+      expect(other_conn).not_to receive(:send)
+      perform!
+    end
+  end
+
   context 'after disconnecting' do
     let(:contents) { 'hello world' }
     let(:other_conn) { double }
