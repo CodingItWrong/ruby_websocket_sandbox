@@ -21,7 +21,9 @@ $ createdb ruby_websocket_sandbox_development
 $ ruby migrations/00001_create_messages_table.rb
 ```
 
-## Running
+## Usage
+
+### Running
 
 ```bash
 $ bin/falcon
@@ -33,7 +35,7 @@ or
 $ bin/puma
 ```
 
-## Trying It Out
+### Trying It Out
 
 ```bash
 $ npm install -g wscat
@@ -41,3 +43,11 @@ $ wscat -c localhost:3000
 ```
 
 Note that with `async/falcon` the message needs to be valid JSON, so you need to wrap strings in quotes. With `faye/puma` the message is treated as a string, so no special handling is needed.
+
+### REPL
+
+```bash
+$ rake console
+```
+
+Models will be available.
