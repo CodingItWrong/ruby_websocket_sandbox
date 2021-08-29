@@ -13,6 +13,14 @@ App = lambda do |env|
     ws.send('Connected to Faye')
     Handler.connected(ws)
 
+    ws.on :message do |event|
+      Handler.received(ws, event.data)
+    end
+
+    ws.on :close do |event|
+      Handler.disconnected(ws)
+    end
+
     # Return async Rack response
     ws.rack_response
 

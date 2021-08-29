@@ -13,26 +13,21 @@ class ConnectionHandler
     Message.all.each do |message|
       connection.send(message.contents)
     end
+  end
 
-    connection.on :message do |event|
-      received(event.data)
-    end
+  def received(_connection, data)
+    puts "Faye received: #{data}"
+    Message.create!(contents: data)
+    send_all(data)
+  end
 
-    connection.on :close do |event|
-      p [:close, event.code, event.reason]
-      connections.delete(connection)
-    end
+  def disconnected(connection)
+    connections.delete(connection)
   end
 
   private
 
   attr_reader :connections
-
-  def received(data)
-    puts "Faye received: #{data}"
-    Message.create!(contents: data)
-    send_all(data)
-  end
 
   def send_all(data)
     connections.each do |connection|
