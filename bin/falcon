@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+bundle exec falcon serve -b http://localhost:3000 -c config_falcon.ru
