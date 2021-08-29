@@ -1,3 +1,5 @@
+## frozen_string_literal: true
+
 require 'faye/websocket'
 require_relative 'db'
 require_relative 'message'
