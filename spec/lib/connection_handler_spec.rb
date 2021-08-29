@@ -28,11 +28,13 @@ RSpec.describe ConnectionHandler do
     end
   end
 
-  context 'when there are no previous messages' do
+  context 'when receiving a message' do
     let(:contents) { 'hello world' }
+    let(:other_conn) { double }
 
     def perform!
       subject.connected(conn)
+      subject.connected(other_conn)
       subject.received(conn, contents)
     end
 
@@ -41,6 +43,7 @@ RSpec.describe ConnectionHandler do
         .and_return([])
       allow(messages).to receive(:create!)
       allow(conn).to receive(:send)
+      allow(other_conn).to receive(:send)
     end
 
     it 'saves the message' do
@@ -49,9 +52,10 @@ RSpec.describe ConnectionHandler do
       perform!
     end
 
-    it 'replies with messages sent' do
-      expect(conn).to receive(:send)
-        .with("Response from Faye: #{contents}")
+    it 'sends the message to all connections' do
+      message = "Response from Faye: #{contents}"
+      expect(conn).to receive(:send).with(message)
+      expect(other_conn).to receive(:send).with(message)
       perform!
     end
   end
