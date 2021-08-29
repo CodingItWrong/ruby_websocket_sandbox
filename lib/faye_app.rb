@@ -2,7 +2,6 @@
 
 require 'faye/websocket'
 require 'pry'
-require_relative 'db'
 require_relative 'connection_handler'
 
 Handler = ConnectionHandler.new
