@@ -17,7 +17,6 @@ class ConnectionHandler
   end
 
   def received(_connection, data)
-    puts "Faye received: #{data}"
     messages.create!(contents: data)
     send_all(data)
   end

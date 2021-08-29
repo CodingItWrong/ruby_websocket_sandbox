@@ -14,6 +14,7 @@ App = lambda do |env|
     Handler.connected(ws)
 
     ws.on :message do |event|
+      puts "Faye received: #{event.data}"
       Handler.received(ws, event.data)
     end
 
