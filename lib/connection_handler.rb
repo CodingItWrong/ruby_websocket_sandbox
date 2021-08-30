@@ -18,7 +18,7 @@ class ConnectionHandler
 
   def received(connection, data)
     message = messages.create!(contents: data)
-    send_all(data)
+    send_to_all(data)
   rescue => e
     connection.send(e.message)
   end
@@ -31,7 +31,7 @@ class ConnectionHandler
 
   attr_reader :connections, :messages
 
-  def send_all(data)
+  def send_to_all(data)
     connections.each do |connection|
       connection.send("Response: #{data}")
     end
