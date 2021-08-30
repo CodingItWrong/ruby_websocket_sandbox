@@ -1,4 +1,4 @@
-RSpec.describe 'ConnectionHandler integration', :db do
+RSpec.describe 'ConnectionHandler integration' do
   let(:conn) { double('conn') }
   let(:other_conn) { double('other_conn') }
 

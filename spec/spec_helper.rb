@@ -107,6 +107,10 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 
+  config.define_derived_metadata(file_path: /spec\/integration/) do |meta|
+    meta[:db] = true
+  end
+
   config.when_first_matching_example_defined(:db) do
     require_relative 'support/db'
   end
