@@ -4,7 +4,7 @@ require_relative '../../migrations/migrations'
 
 RSpec.configure do |c|
   c.before(:suite) do
-    Migrations.up
+    Migrations.migrate(:up)
     Message.destroy_all
   end
 
