@@ -1,99 +1,36 @@
 RSpec.describe 'ConnectionHandler integration', :db do
   let(:conn) { double('conn') }
+  let(:other_conn) { double('other_conn') }
+
+  let!(:message1) { Message.create!(contents: 'old message 1') }
+  let!(:message2) { Message.create!(contents: 'old message 2') }
 
   subject(:handler) { ConnectionHandler.new }
 
-  context 'upon connection' do
-    let(:other_conn) { double }
-    let!(:message1) { Message.create!(contents: 'message 1') }
-    let!(:message2) { Message.create!(contents: 'message 2') }
-
-    def perform!
-      subject.connected(conn)
-      subject.connected(other_conn)
-    end
-
-    before do
-      allow(other_conn).to receive(:send)
-    end
-
-    it 'sends all past messages to the new connection once' do
-      expect(conn).to receive(:send)
-        .with('message 1')
-      expect(conn).to receive(:send)
-        .with('message 2')
-      perform!
-    end
+  before do
+    allow(conn).to receive(:send)
+    allow(other_conn).to receive(:send)
   end
 
-  context 'when receiving a message' do
-    let(:contents) { 'hello world' }
-    let(:other_conn) { double('other_conn') }
+  it 'sends messages' do
+    subject.connected(conn)
+    subject.connected(other_conn)
 
-    def perform!
-      subject.connected(conn)
-      subject.connected(other_conn)
-      subject.received(conn, contents)
-    end
+    subject.received(conn, 'message from me')
+    subject.received(other_conn, 'message from other')
+    subject.received(conn, '')
 
-    before do
-      allow(conn).to receive(:send)
-      allow(other_conn).to receive(:send)
-    end
+    subject.disconnected(conn)
 
-    it 'saves the message' do
-      perform!
-      expect(Message.count).to eq(1)
-      expect(Message.first.contents).to eq(contents)
-    end
+    subject.received(other_conn, 'message after disconnect')
 
-    it 'sends the message to all connections' do
-      message = "Response: #{contents}"
-      expect(conn).to receive(:send).with(message)
-      expect(other_conn).to receive(:send).with(message)
-      perform!
-    end
-  end
-
-  context 'when receiving an empty message' do
-    let(:other_conn) { double('other_conn') }
-
-    def perform!
-      subject.connected(conn)
-      subject.connected(other_conn)
-      subject.received(conn, '')
-    end
-
-    before do
-      allow(conn).to receive(:send)
-    end
-
-    it 'sends the error message to the sender only' do
-      error = "Validation failed: Contents can't be blank"
-      expect(conn).to receive(:send).with(error)
-      expect(other_conn).not_to receive(:send)
-      perform!
-    end
-  end
-
-  context 'after disconnecting' do
-    let(:contents) { 'hello world' }
-    let(:other_conn) { double }
-
-    def perform!
-      subject.connected(conn)
-      subject.connected(other_conn)
-      subject.disconnected(conn)
-      subject.received(other_conn, contents)
-    end
-
-    before do
-      allow(other_conn).to receive(:send)
-    end
-
-    it 'does not send messages to the disconnected connection' do
-      expect(conn).not_to receive(:send)
-      perform!
-    end
+    # connection while connected should receive past messages and all new
+    # messages sent
+    expect(conn).to have_received(:send).with('old message 1')
+    expect(conn).to have_received(:send).with('old message 2')
+    expect(conn).to have_received(:send).with('Response: message from me')
+    expect(conn).to have_received(:send).with('Response: message from other')
+    expect(conn).to have_received(:send).with("Validation failed: Contents can't be blank")
+    expect(conn).not_to have_received(:send).with('Response: message after disconnect')
   end
 end
