@@ -26,11 +26,11 @@ RSpec.describe 'ConnectionHandler integration', :db do
 
     # connection while connected should receive past messages and all new
     # messages sent
-    expect(conn).to have_received(:send).with('old message 1')
-    expect(conn).to have_received(:send).with('old message 2')
-    expect(conn).to have_received(:send).with('Response: message from me')
-    expect(conn).to have_received(:send).with('Response: message from other')
-    expect(conn).to have_received(:send).with("Validation failed: Contents can't be blank")
+    expect(conn).to have_received(:send).with('old message 1').ordered
+    expect(conn).to have_received(:send).with('old message 2').ordered
+    expect(conn).to have_received(:send).with('Response: message from me').ordered
+    expect(conn).to have_received(:send).with('Response: message from other').ordered
+    expect(conn).to have_received(:send).with("Validation failed: Contents can't be blank").ordered
     expect(conn).not_to have_received(:send).with('Response: message after disconnect')
   end
 end
