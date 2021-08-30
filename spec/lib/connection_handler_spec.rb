@@ -61,7 +61,8 @@ RSpec.describe ConnectionHandler do
     end
   end
 
-  context 'when receiving an empty message' do
+  context 'when saving a message fails' do
+    let(:contents) { 'hello world' }
     let(:other_conn) { double }
 
     def perform!
@@ -79,7 +80,7 @@ RSpec.describe ConnectionHandler do
     end
 
     it 'sends the error message to the sender only' do
-      message = "foof"
+      message = 'foof'
       expect(conn).to receive(:send).with(message)
       expect(other_conn).not_to receive(:send)
       perform!
