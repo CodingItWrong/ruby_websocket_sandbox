@@ -1,5 +1,13 @@
-adapter: 'postgresql'
-host: 'localhost'
-username: 'postgres'
-password: ''
-database: 'ruby_websocket_sandbox_development'
+development:
+  adapter: 'postgresql'
+  host: 'localhost'
+  username: 'postgres'
+  password: ''
+  database: 'ruby_websocket_sandbox_development'
+
+test:
+  adapter: 'postgresql'
+  host: 'localhost'
+  username: 'postgres'
+  password: ''
+  database: 'ruby_websocket_sandbox_test'
