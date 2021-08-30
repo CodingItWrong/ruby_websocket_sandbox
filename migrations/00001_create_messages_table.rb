@@ -12,7 +12,7 @@ class CreateMessagesTable < ActiveRecord::Migration[6.1]
 
   def down
     if ActiveRecord::Base.connection.table_exists?(:messages)
-      drop_table :users
+      drop_table :messages
     end
   end
 end

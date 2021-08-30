@@ -6,6 +6,6 @@ require_relative '00001_create_messages_table.rb'
 
 class Migrations
   class << self
-    delegate :up, :down, to: CreateMessagesTable
+    delegate :migrate, to: CreateMessagesTable
   end
 end

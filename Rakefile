@@ -13,4 +13,16 @@ task :console do
   IRB.start
 end
 
+namespace :migrate do
+  task :up do
+    require_relative 'migrations/migrations'
+    Migrations.migrate(:up)
+  end
+
+  task :down do
+    require_relative 'migrations/migrations'
+    Migrations.migrate(:down)
+  end
+end
+
 task :c => :console
