@@ -33,7 +33,7 @@ class ConnectionHandler
 
   def send_to_all(data)
     connections.each do |connection|
-      connection.send("Response: #{data}")
+      connection.send(data)
     end
   end
 end

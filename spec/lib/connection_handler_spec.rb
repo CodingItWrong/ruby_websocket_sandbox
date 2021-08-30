@@ -54,9 +54,8 @@ RSpec.describe ConnectionHandler do
     end
 
     it 'sends the message to all connections' do
-      message = "Response: #{contents}"
-      expect(conn).to receive(:send).with(message)
-      expect(other_conn).to receive(:send).with(message)
+      expect(conn).to receive(:send).with(contents)
+      expect(other_conn).to receive(:send).with(contents)
       perform!
     end
   end

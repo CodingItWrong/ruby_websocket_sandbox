@@ -28,9 +28,9 @@ RSpec.describe 'ConnectionHandler integration', :db do
     # messages sent
     expect(conn).to have_received(:send).with('old message 1').ordered
     expect(conn).to have_received(:send).with('old message 2').ordered
-    expect(conn).to have_received(:send).with('Response: message from me').ordered
-    expect(conn).to have_received(:send).with('Response: message from other').ordered
+    expect(conn).to have_received(:send).with('message from me').ordered
+    expect(conn).to have_received(:send).with('message from other').ordered
     expect(conn).to have_received(:send).with("Validation failed: Contents can't be blank").ordered
-    expect(conn).not_to have_received(:send).with('Response: message after disconnect')
+    expect(conn).not_to have_received(:send).with('message after disconnect')
   end
 end
