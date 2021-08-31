@@ -18,7 +18,7 @@ Includes two implementations:
 
 ```bash
 $ createdb ruby_websocket_sandbox_development
-$ ruby migrations/00001_create_messages_table.rb
+$ rake db:migrate
 ```
 
 ## Usage
