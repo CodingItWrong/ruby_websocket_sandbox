@@ -10,6 +10,7 @@ gem 'zeitwerk'
 gem 'activerecord'
 gem 'pg'
 gem 'rake'
+gem 'bcrypt'
 
 # faye layer
 gem 'faye-websocket'
