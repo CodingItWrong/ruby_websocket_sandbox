@@ -16,5 +16,3 @@ class CreateMessagesTable < ActiveRecord::Migration[6.1]
     end
   end
 end
-
-CreateMessagesTable.migrate(:up)
