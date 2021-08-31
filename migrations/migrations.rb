@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# TODO: dynamically import all migrations and provide a way to run all
+# TODO: dynamically import all migrations
 
 require_relative '00001_create_messages_table.rb'
 require_relative '00002_create_users_table.rb'
