@@ -1,8 +1,16 @@
+# frozen_string_literal: true
+
 RSpec.describe ConnectionHandler do
   let(:messages) { class_double(Message) }
+  let(:send_message_action) { instance_double(SendMessageAction) }
   let(:conn) { double }
 
-  subject(:handler) { ConnectionHandler.new(messages: messages) }
+  subject(:handler) {
+    ConnectionHandler.new(
+      messages: messages,
+      send_message_action: send_message_action,
+    )
+  }
 
   context 'upon connection' do
     let(:other_conn) { double }
@@ -47,41 +55,9 @@ RSpec.describe ConnectionHandler do
       allow(other_conn).to receive(:send)
     end
 
-    it 'saves the message' do
-      expect(messages).to receive(:create!)
-        .with(contents: contents)
-      perform!
-    end
-
-    it 'sends the message to all connections' do
-      expect(conn).to receive(:send).with(contents)
-      expect(other_conn).to receive(:send).with(contents)
-      perform!
-    end
-  end
-
-  context 'when saving a message fails' do
-    let(:contents) { 'hello world' }
-    let(:other_conn) { double }
-
-    def perform!
-      subject.connected(conn)
-      subject.connected(other_conn)
-      subject.received(conn, '')
-    end
-
-    before do
-      allow(messages).to receive(:all)
-        .and_return([])
-      allow(messages).to receive(:create!)
-        .and_raise(RuntimeError.new('foof'))
-      allow(conn).to receive(:send)
-    end
-
-    it 'sends the error message to the sender only' do
-      message = 'foof'
-      expect(conn).to receive(:send).with(message)
-      expect(other_conn).not_to receive(:send)
+    it 'calls the action' do
+      expect(send_message_action).to receive(:call)
+        .with(connection: conn, data: contents)
       perform!
     end
   end
@@ -89,24 +65,21 @@ RSpec.describe ConnectionHandler do
   context 'after disconnecting' do
     let(:contents) { 'hello world' }
     let(:other_conn) { double }
+    let(:message1) { double(contents: 'message 1') }
 
     def perform!
       subject.connected(conn)
-      subject.connected(other_conn)
       subject.disconnected(conn)
-      subject.received(other_conn, contents)
+      subject.connected(other_conn)
     end
 
     before do
       allow(messages).to receive(:all)
-        .and_return([])
+        .and_return([message1])
       allow(messages).to receive(:create!)
       allow(other_conn).to receive(:send)
     end
 
-    it 'does not send messages to the disconnected connection' do
-      expect(conn).not_to receive(:send)
-      perform!
-    end
+    it 'how to determine the connection is removed in a unit test??'
   end
 end

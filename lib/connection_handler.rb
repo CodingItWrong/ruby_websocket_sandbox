@@ -3,9 +3,15 @@
 require_relative 'db'
 
 class ConnectionHandler
-  def initialize(messages: Message)
+  attr_reader :connections
+
+  def initialize(
+    messages: Message,
+    send_message_action: SendMessageAction.new(handler: self, messages: Message)
+  )
     @connections = Set.new
     @messages = messages
+    @send_message_action = send_message_action
   end
 
   def connected(connection)
@@ -17,10 +23,7 @@ class ConnectionHandler
   end
 
   def received(connection, data)
-    message = messages.create!(contents: data)
-    send_to_all(data)
-  rescue => e
-    connection.send(e.message)
+    send_message_action.call(connection: connection, data: data)
   end
 
   def disconnected(connection)
@@ -29,7 +32,7 @@ class ConnectionHandler
 
   private
 
-  attr_reader :connections, :messages
+  attr_reader :messages, :send_message_action
 
   def send_to_all(data)
     connections.each do |connection|
