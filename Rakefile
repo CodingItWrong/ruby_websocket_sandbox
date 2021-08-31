@@ -13,13 +13,13 @@ task :console do
   IRB.start
 end
 
-namespace :migrate do
-  task :up do
+namespace :db do
+  task :migrate do
     require_relative 'migrations/migrations'
     Migrations.migrate(:up)
   end
 
-  task :down do
+  task :rollback do
     require_relative 'migrations/migrations'
     Migrations.migrate(:down)
   end
