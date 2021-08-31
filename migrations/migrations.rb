@@ -8,6 +8,7 @@ require_relative '00002_create_users_table.rb'
 class Migrations
   MIGRATIONS = [
     CreateMessagesTable,
+    CreateUsersTable,
   ]
 
   def self.migrate(direction)
